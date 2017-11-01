@@ -1,0 +1,61 @@
+.container {
+	background-color: #0d0d0d;
+	color: lime;
+	font-family: 'VT323', monospace;
+	font-size: 20px;
+}
+
+h1 {
+	font-size: 50px;
+}
+
+hr {
+	border-color: lime;
+
+}
+.line-1 {
+	border-width: 1px;
+}
+.submit-info {
+	background-color: lime;
+	color: black;
+	border-color: #b3ffb3;
+	
+}
+
+.type-info {
+	border-style: inset;
+	border-color: lime;
+	background-color: #0d0d0d;
+	color: lime;
+
+
+}
+
+.box {
+	border-style: solid;
+	border-color: lime;
+	margin-top: 20px;
+	height: 200px;
+}
+
+.winner-loser {
+	margin-left: 45px;
+	margin-right: 45px;
+}
+
+#chat-area {
+	margin-top: 40px;
+	border-style: solid;
+	border-color: lime;
+	background-color: #0d0d0d;
+	height: 200px;
+}
+
+.chat-box {
+	margin-top: 10px;
+}
+
+#type-chat {
+	width: 45%;
+}
