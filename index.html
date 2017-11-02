@@ -5,7 +5,6 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
-	<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
 
 </head>
 <body class="container">
@@ -15,7 +14,7 @@
 			<hr>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row" id="set-name">
 		<div class="col-md-12">
 			<form class="button-form text-center">
 				<input id="fill-name" class="type-info" type="text" placeholder="Name">
@@ -37,17 +36,22 @@
 	<div class="row">
 		<div class="col-md-3"></div>
 		<div class="col-md-6">
-			<div id="chat-area" class="line-1"></div>
+			<textarea id="chat-area" class="line-1" rows="6" cols="65" disabled></textarea>
 		</div>
 		<div class="col-md-2"></div>
 	</div>
 	<div class="row">
 		<div class="col-md-12 text-center">
-			<form class="chat-box">
-				<input id="type-chat" class="type-info line-1" type="text">
-				<input id="add-chat" class="submit-info" type="submit" value="Send">
-			</form>
+			<div class="chat-box">
+				<input id="type-chat" class="type-info line-1" type="text" disabled>
+				 <button id="add-chat" class="submit-info">Send</button>
+			</div>
 		</div>
 	</div>
+	
+	<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="assets/javascript/rps.js"></script>
 </body>
 </html>
