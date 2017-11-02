@@ -21,6 +21,7 @@ if (localStorage.name) {
 			$('#set-name').show();
 		} else {
 			$('#type-chat').removeAttr("disabled");
+			$('#choices').show();
 		}
 	})
 } 
@@ -40,6 +41,13 @@ $('#add-name').on("click", function(event) {
   	localStorage.name = whoami;
 
 	$('#type-chat').removeAttr("disabled");
+});
+
+$('.choice').on("click", function() {
+	choice = $(this).text();
+	$('.choice').off('click');
+	console.log(choice);
+	database.ref('users/' + whoami + '/choice').set(choice);
 });
 
 // Firebase watcher + initial loader HINT: .on("value")

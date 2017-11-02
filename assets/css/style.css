@@ -60,6 +60,6 @@ hr {
 	width: 45%;
 }
 
-#set-name {
+#set-name, #choices {
 	display: none;
 }
