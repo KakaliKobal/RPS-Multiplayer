@@ -11,6 +11,7 @@ firebase.initializeApp(config);
 var chatLog;
 var database = firebase.database();
 
+var whoami;
 
 if (localStorage.name) {
 	whoami = localStorage.name;
@@ -47,11 +48,20 @@ database.ref().on("value", function(snapshot) {
 	} else {
 		chatLog = snapshot.val().chatlog;
 	}
+
+	users = snapshot.val().users;
+	console.log(users);
+
 	// Log everything that's coming out of snapshot
-
+	if (snapshot.val().users.length > 1) {
+		$('#set-name').hide();
+		$('#type-chat').attr("disabled", "disabled");
+	}
 	
-	console.log(snapshot.val());
-
+	if (snapshot.val().users !== null) {
+		updateUsersName(snapshot.val().users);
+	}
+	
 	updateChatLog(chatLog);
 
 	
@@ -61,7 +71,17 @@ database.ref().on("value", function(snapshot) {
 	console.log("Errors handled: " + errorObject.code);
 });
 
+function updateUsersName(users) {
+	names = Object.keys(users);
+	names.forEach(function(item) {
+		if (item == whoami) {
+			$('#player-1-name').text(item);
+		} else {
+			$('#player-2-name').text(item);
+		}
+	})
 
+}
 
 function updateChatLog(chatlog) {
 	if (!chatlog) return
