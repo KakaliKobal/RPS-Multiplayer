@@ -12,6 +12,7 @@ var chatLog;
 var database = firebase.database();
 firebase.database.enableLogging(false);
 var whoami;
+var timeout;
 
 if (localStorage.name) {
 	whoami = localStorage.name;
@@ -55,9 +56,14 @@ database.ref().on("value", function(snapshot) {
 	} else {
 		chatLog = [];
 	}
-	// Log everything that's coming out of snapshot
+
 	users = snapshot.val().users;
 	if (users) {
+		opponent = getOpponent(users);
+		now = new Date();
+		if (opponent && !(users[opponent]['connections'])) {
+			if (!timeout) timeout = setTimeout(clearUser(opponent), 1000);
+		} 
 		updateUsersName(users);
 		updateChatLog(chatLog);
 	}
@@ -87,6 +93,13 @@ database.ref().on("value", function(snapshot) {
 }, function(errorObject) {
 	console.log("Errors handled: " + errorObject.code);
 });
+
+function clearUser(opponent) {
+	if (!(users[opponent]['connections'])) {
+		database.ref('users/' + opponent).remove();
+		database.ref('chatlog').set("");
+		}
+}
 
 function clickChoice() {
 	choice = $(this).text();
@@ -170,6 +183,15 @@ function getOpponentChoice(users) {
 		}
 	})
 	return opponentChoice;
+}
+
+function getOpponent(users) {
+	names = Object.keys(users);
+	opponent = "";
+	names.forEach(function(item) {
+		if (item !== whoami) opponent = item;
+	});
+	return opponent;
 }
 
 function updateChatLog(chatlog) {
