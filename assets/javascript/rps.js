@@ -204,3 +204,31 @@ function sendMessage(event) {
 $( document ).ready(function() {
 	$('#add-chat').on("click", sendMessage);
 });
+
+//  Taken from firebase docs https://firebase.google.com/docs/database/web/offline-capabilities
+// since I can connect from multiple devices or browser tabs, we store each connection instance separately
+// any time that connectionsRef's value is null (i.e. has no children) I am offline
+var myConnectionsRef = firebase.database().ref('users/' + whoami + '/connections');
+
+// stores the timestamp of my last disconnect (the last time I was seen online)
+var lastOnlineRef = firebase.database().ref('users/' + whoami + 'lastOnline');
+
+var connectedRef = firebase.database().ref('.info/connected');
+connectedRef.on('value', function(snap) {
+  if (snap.val() === true) {
+    // We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
+    var con = myConnectionsRef.push();
+
+    // When I disconnect, remove this device
+    con.onDisconnect().remove();
+
+    // Add this device to my connections list
+    // this value could contain info about the device or a timestamp too
+    con.set(true);
+
+    // When I disconnect, update the last time I was seen online
+    lastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
+  }
+});
+
+
