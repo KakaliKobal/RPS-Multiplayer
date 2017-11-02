@@ -135,6 +135,7 @@ function checkForWin(users) {
         	wins++;
         	$('.winner-loser').html("<p> You Won that game <br />Your opponent choice " + opponentChoice + "!</p>");
         } else if (tie) {
+        	console.log("Game tied!");
         	$('.winner-loser').html("<p> Game Tied!</p>");
         } else {
         	losses++;
