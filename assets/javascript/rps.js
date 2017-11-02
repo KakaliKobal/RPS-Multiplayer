@@ -128,12 +128,17 @@ function moreThanOne(users) {
 
 function updateUsersName(users) {
 	names = Object.keys(users);
-	names.forEach(function(item) {
-		if (item == whoami) {
-			$('#player-1-name').text(item);
-			$('#player-1-win').text("Wins: " + users[whoami]['wins']);
+	names.forEach(function(name) {
+		if (name == whoami) {
+			$('#player-1-name').text(name);
+			$('#player-1-win').text("Wins: " + users[name]['wins']);
+			$('#player-1-loss').text("Losses: " + users[name]['losses']);
 		} else {
-			$('#player-2-name').text(item);
+			$('#player-2-name').text(name);
+			$('#player-2-win').text("Wins: " + users[name]['wins']);
+			$('#player-2-loss').text("Losses: " + users[name]['losses']);
+
+
 		}
 	})
 
