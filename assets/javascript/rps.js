@@ -44,12 +44,9 @@ $('#add-name').on("click", function(event) {
 	$('#type-chat').removeAttr("disabled");
 });
 
-$('.choice').on("click", function() {
-	choice = $(this).text();
-	$('.choice').off('click');
-	database.ref('users/' + whoami).update({choice: choice});
+$('.choice').on("click", clickChoice);
 
-});
+
 
 // Firebase watcher + initial loader HINT: .on("value")
 database.ref().on("value", function(snapshot) {
@@ -83,6 +80,12 @@ database.ref().on("value", function(snapshot) {
 	console.log("Errors handled: " + errorObject.code);
 });
 
+function clickChoice() {
+	choice = $(this).text();
+	$('.choice').off('click');
+	database.ref('users/' + whoami).update({choice: choice});
+}
+
 function moreThanOne(users) {
 	if (Object.keys(users).length > 1) {return true} else {return false}
 }
@@ -100,6 +103,8 @@ function updateUsersName(users) {
 }
 
 function checkForWin(users) {
+	win = false;
+	tie = true;
 	console.log("Checking for win!");
 	opponentChoice = getOpponentChoice(users);
 	myChoice = users[whoami]['choice'];
@@ -110,23 +115,36 @@ function checkForWin(users) {
 	if ((myChoice === "Rock") || (myChoice === "Paper") || (myChoice === "Scissors")) {
 
         if ((myChoice === "Rock") && (opponentChoice === "Scissors")) {
-          wins++;
+          win = true;
         } else if ((myChoice === "Rock") && (opponentChoice === "Paper")) {
-          losses++;
+          win = false;
         } else if ((myChoice === "Scissors") && (opponentChoice === "Rock")) {
-          losses++;
+          win = false;
         } else if ((myChoice === "Scissors") && (opponentChoice === "Paper")) {
-          wins++;
+          win = true;
         } else if ((myChoice === "Paper") && (opponentChoice === "Rock")) {
-          wins++;
+          win = true;
         } else if ((myChoice === "Paper") && (opponentChoice === "Scissors")) {
-          losses++;
+          win = false;
+        } else if (myChoice === opponentChoice) {
+        	tie = true;
         }
+        if (win) {
+        	wins++;
+        	$('.winner-loser').html("<p> You Won that game <br />Your opponent choice " + opponentChoice + "!</p>");
+        } else if (tie) {
+        	$('.winner-loser').html("<p> Game Tied!</p>");
+        } else {
+        	losses++;
+        	$('.winner-loser').html("<p> You Lost that game <br />Your opponent choice " + opponentChoice + "!</p>");
+        }
+
         database.ref('users/' + whoami).update({
 	  		wins: wins,
 	  		choice: "",
 	  		losses: losses
 	  	});
+	  	$('.choice').on("click", clickChoice);
     }
 
 }
