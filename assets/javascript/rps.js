@@ -10,7 +10,7 @@ firebase.initializeApp(config);
 
 var chatLog;
 var database = firebase.database();
-firebase.database.enableLogging(true, true)
+firebase.database.enableLogging(false);
 var whoami;
 
 if (localStorage.name) {
@@ -108,9 +108,11 @@ function checkForWin(users) {
 	console.log("Checking for win!");
 	opponentChoice = getOpponentChoice(users);
 	myChoice = users[whoami]['choice'];
-	if (opponentChoice === "") return
+	if (opponentChoice === "" || myChoice === "") return
 	wins = users[whoami]['wins'];
 	losses = users[whoami]['losses'];
+
+	console.log("O: " + opponentChoice +"\n" + "P: " + myChoice);
 
 	if ((myChoice === "Rock") || (myChoice === "Paper") || (myChoice === "Scissors")) {
 
