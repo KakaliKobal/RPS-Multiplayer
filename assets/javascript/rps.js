@@ -63,6 +63,7 @@ database.ref().on("value", function(snapshot) {
 
 	// Log everything that's coming out of snapshot
 	if (snapshot.val().users.length > 1) {
+
 		$('#set-name').hide();
 		$('#type-chat').attr("disabled", "disabled");
 	}
@@ -72,7 +73,7 @@ database.ref().on("value", function(snapshot) {
 	}
 	
 	updateChatLog(chatLog);
-
+	checkForWin(snapshot.val().users);
 	
 
 // Handle the errors
@@ -90,6 +91,45 @@ function updateUsersName(users) {
 		}
 	})
 
+}
+
+function checkForWin(users) {
+	opponentChoice = getOpponentChoice(users);
+	myChoice = users[whoami]['choice'];
+	wins = users[whomai]['wins'];
+	losses = users[whomai]['losses'];
+
+	if ((myChoice === "Rock") || (myChoice === "Paper") || (myChoice === "Scissors")) {
+
+        if ((myChoice === "Rock") && (opponentChoice === "Scissors")) {
+          wins++;
+        } else if ((myChoice === "Rock") && (opponentChoice === "Paper")) {
+          losses++;
+        } else if ((myChoice === "Scissors") && (opponentChoice === "Rock")) {
+          losses++;
+        } else if ((myChoice === "Scissors") && (opponentChoice === "Paper")) {
+          wins++;
+        } else if ((myChoice === "Paper") && (opponentChoice === "Rock")) {
+          wins++;
+        } else if ((myChoice === "Paper") && (opponentChoice === "Scissors")) {
+          losses++;
+        }
+        database.ref('users/' + whoami).set({
+	  		wins: wins,
+	  		choice: "",
+	  		losses: losses
+	  	});
+    }
+
+}
+
+function getOpponentChoice(opponent) {
+	names = Object.keys(users);
+	names.forEach(function(item) {
+		if (item !== whoami) {
+			return item['choice'];
+		}
+	})
 }
 
 function updateChatLog(chatlog) {
