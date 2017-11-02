@@ -20,8 +20,8 @@ if (localStorage.name) {
 		if (snapshot.val() == null) {
 			localStorage.removeItem(name);
 			$('#set-name').show();
-			updateOnlineInfo();
 		} else {
+			updateOnlineInfo();
 			$('#type-chat').removeAttr("disabled");
 		}
 	})
