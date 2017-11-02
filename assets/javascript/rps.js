@@ -62,18 +62,19 @@ database.ref().on("value", function(snapshot) {
 	console.log(users);
 
 	// Log everything that's coming out of snapshot
-	if (snapshot.val().users.length > 1) {
+
+	if (snapshot.val().users && snapshot.val().users.length > 1) {
 
 		$('#set-name').hide();
 		$('#type-chat').attr("disabled", "disabled");
 	}
 	
-	if (snapshot.val().users !== null) {
+	if (snapshot.val().users) {
 		updateUsersName(snapshot.val().users);
+		updateChatLog(chatLog);
+		checkForWin(snapshot.val().users);
 	}
-	
-	updateChatLog(chatLog);
-	checkForWin(snapshot.val().users);
+
 	
 
 // Handle the errors
