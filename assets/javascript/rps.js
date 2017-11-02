@@ -211,7 +211,7 @@ $( document ).ready(function() {
 var myConnectionsRef = firebase.database().ref('users/' + whoami + '/connections');
 
 // stores the timestamp of my last disconnect (the last time I was seen online)
-var lastOnlineRef = firebase.database().ref('users/' + whoami + 'lastOnline');
+var lastOnlineRef = firebase.database().ref('users/' + whoami + '/lastOnline');
 
 var connectedRef = firebase.database().ref('.info/connected');
 connectedRef.on('value', function(snap) {
