@@ -64,7 +64,9 @@ database.ref().on("value", function(snapshot) {
 		opponent = getOpponent(users);
 		now = new Date();
 		if (opponent && !(users[opponent]['connections'])) {
-			if (!timeout) timeout = setTimeout(clearUser(opponent), 1000);
+			console.log("Detected opponent leaving");
+			// if (!timeout) 
+			timeout = setTimeout(clearUser, 3000, opponent);
 		} 
 		updateUsersName(users);
 		updateChatLog(chatLog);
@@ -97,10 +99,16 @@ database.ref().on("value", function(snapshot) {
 });
 
 function clearUser(opponent) {
-	if (!(users[opponent]['connections'])) {
-		database.ref('users/' + opponent).remove();
-		database.ref('chatlog').set("");
+	console.log('ClearUser');
+	// clearTimeout(timeout);
+	database.ref("users").once('value', function(snapshot) {
+		if (!(snapshot.val()[opponent]["connections"])) {
+			console.log("Removing opponent!");
+			database.ref('users/' + opponent).remove();
+			database.ref('chatlog').set("");
+			$('#player-2-name').text("Waiting for Player 2");
 		}
+	});
 }
 
 function clickChoice() {
