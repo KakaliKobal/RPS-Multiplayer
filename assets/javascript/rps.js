@@ -75,7 +75,7 @@ database.ref().on("value", function(snapshot) {
 		$('#player-2-has-choosen').text("I have decided, waiting for you!");
 	}
 	if (users[whoami]['choice'] !== "") {
-		$('#player-1-has-choosen').text("You chose: " + users[whoami]['choice']);
+		$('#player-1-has-choosen').text("You chose: " + users[whoami]['choice'])
 	}
 
 	if (users && moreThanOne(users)) {
@@ -102,11 +102,15 @@ function clearUser(opponent) {
 	console.log('ClearUser');
 	// clearTimeout(timeout);
 	database.ref("users").once('value', function(snapshot) {
+		if (!(snapshot.val()[opponent])) return
 		if (!(snapshot.val()[opponent]["connections"])) {
 			console.log("Removing opponent!");
+			database.ref('users/' + whoami + "/choice").set("");
 			database.ref('users/' + opponent).remove();
 			database.ref('chatlog').set("");
 			$('#player-2-name').text("Waiting for Player 2");
+			$('#player-1-has-choose').text('Please pick:');
+			$('.winner-loser').text("Opponent has left, wait for new player")
 		}
 	});
 }
@@ -115,6 +119,7 @@ function clickChoice() {
 	choice = $(this).text();
 	$('.choice').off('click');
 	database.ref('users/' + whoami).update({choice: choice});
+	$('#choices').hide();
 }
 
 function moreThanOne(users) {
@@ -126,6 +131,7 @@ function updateUsersName(users) {
 	names.forEach(function(item) {
 		if (item == whoami) {
 			$('#player-1-name').text(item);
+			$('#player-1-win').text("Wins: " + users[whoami]['wins']);
 		} else {
 			$('#player-2-name').text(item);
 		}
@@ -179,6 +185,7 @@ function checkForWin(users) {
 	  	});
 	  	$('#player-2-has-choosen').text("Choosing.....");
 	  	$('#player-1-has-choosen').text("Please pick:");
+	  	$('#choices').show();
 	  	$('.choice').on("click", clickChoice);
     }
 
