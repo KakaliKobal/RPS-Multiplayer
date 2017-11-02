@@ -10,7 +10,7 @@ firebase.initializeApp(config);
 
 var chatLog;
 var database = firebase.database();
-
+firebase.database.enableLogging(true, true)
 var whoami;
 
 if (localStorage.name) {
@@ -23,7 +23,9 @@ if (localStorage.name) {
 			$('#type-chat').removeAttr("disabled");
 		}
 	})
-} 
+} else {
+	$('#set-name').show();
+}
 
 
 $('#add-name').on("click", function(event) {
@@ -45,16 +47,16 @@ $('#add-name').on("click", function(event) {
 $('.choice').on("click", function() {
 	choice = $(this).text();
 	$('.choice').off('click');
-	console.log(choice);
-	database.ref('users/' + whoami + '/choice').set(choice);
+	database.ref('users/' + whoami).update({choice: choice});
+
 });
 
 // Firebase watcher + initial loader HINT: .on("value")
 database.ref().on("value", function(snapshot) {
-	if (snapshot.val().chatlog == null) {
-		chatLog = [];
-	} else {
+	if (snapshot.val().chatlog) {
 		chatLog = snapshot.val().chatlog;
+	} else {
+		chatLog = [];
 	}
 	// Log everything that's coming out of snapshot
 
@@ -67,8 +69,9 @@ database.ref().on("value", function(snapshot) {
 		$('#choices').show();
 		$('#set-name').hide();
 		$('#type-chat').attr("disabled", "disabled");
-
-		checkForWin(snapshot.val().users);
+		
+		if (snapshot.val().users[whoami].choice !== "")
+			checkForWin(snapshot.val().users);
 	}
 	
 
@@ -97,8 +100,10 @@ function updateUsersName(users) {
 }
 
 function checkForWin(users) {
+	console.log("Checking for win!");
 	opponentChoice = getOpponentChoice(users);
 	myChoice = users[whoami]['choice'];
+	if (opponentChoice === "") return
 	wins = users[whoami]['wins'];
 	losses = users[whoami]['losses'];
 
@@ -117,7 +122,7 @@ function checkForWin(users) {
         } else if ((myChoice === "Paper") && (opponentChoice === "Scissors")) {
           losses++;
         }
-        database.ref('users/' + whoami).set({
+        database.ref('users/' + whoami).update({
 	  		wins: wins,
 	  		choice: "",
 	  		losses: losses
@@ -127,12 +132,14 @@ function checkForWin(users) {
 }
 
 function getOpponentChoice(users) {
+	opponentChoice = "";
 	names = Object.keys(users);
 	names.forEach(function(item) {
 		if (item !== whoami) {
-			return item['choice'];
+			opponentChoice = users[item]['choice'];
 		}
 	})
+	return opponentChoice;
 }
 
 function updateChatLog(chatlog) {
