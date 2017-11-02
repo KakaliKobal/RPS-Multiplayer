@@ -8,8 +8,7 @@ var config = {
 };
 firebase.initializeApp(config);
 
-
-var chatLog = [];
+var chatLog;
 var database = firebase.database();
 
 
@@ -37,16 +36,20 @@ $('#add-name').on("click", function(event) {
   	});
   	$('#set-name').hide();
   	localStorage.name = whoami;
-  	
+
 	$('#type-chat').removeAttr("disabled");
 });
 
 // Firebase watcher + initial loader HINT: .on("value")
 database.ref().on("value", function(snapshot) {
-	if (!(snapshot.val().chatlog)) {chatLog = [];}
+	if (snapshot.val().chatlog == null) {
+		chatLog = [];
+	} else {
+		chatLog = snapshot.val().chatlog;
+	}
 	// Log everything that's coming out of snapshot
 
-	snapshot.val().users
+	
 	console.log(snapshot.val());
 
 	updateChatLog(chatLog);
