@@ -33,7 +33,8 @@ $('#add-name').on("click", function(event) {
 
   	database.ref('users/' + whoami).set({
   		wins: 0,
-  		choice: ""
+  		choice: "",
+  		losses: 0
   	});
   	$('#set-name').hide();
   	localStorage.name = whoami;
