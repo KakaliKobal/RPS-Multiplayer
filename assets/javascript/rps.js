@@ -104,11 +104,11 @@ function updateUsersName(users) {
 
 function checkForWin(users) {
 	win = false;
-	tie = true;
+	tie = false;
 	console.log("Checking for win!");
 	opponentChoice = getOpponentChoice(users);
 	myChoice = users[whoami]['choice'];
-	if (opponentChoice === "" || myChoice === "") return
+	if (opponentChoice === "") return
 	wins = users[whoami]['wins'];
 	losses = users[whoami]['losses'];
 
