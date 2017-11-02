@@ -56,19 +56,25 @@ database.ref().on("value", function(snapshot) {
 		chatLog = [];
 	}
 	// Log everything that's coming out of snapshot
-
-	if (snapshot.val().users) {
-		updateUsersName(snapshot.val().users);
+	users = snapshot.val().users;
+	if (users) {
+		updateUsersName(users);
 		updateChatLog(chatLog);
 	}
+	if (getOpponentChoice(users) !== "") {
+		$('#player-2-has-choosen').text("I have decided, waiting for you!");
+	}
+	if (users[whoami]['choice'] !== "") {
+		$('#player-1-has-choosen').text("You chose: " + users[whoami]['choice']);
+	}
 
-	if (snapshot.val().users && moreThanOne(snapshot.val().users)) {
+	if (users && moreThanOne(users)) {
 		$('#choices').show();
 		$('#set-name').hide();
 		
 		$('#type-chat').removeAttr("disabled");
-		if (snapshot.val().users[whoami].choice !== "")
-			checkForWin(snapshot.val().users);
+		if (users[whoami].choice !== "")
+			checkForWin(users);
 	} else {
 		$('#type-chat').attr("disabled", "disabled");
 	}
@@ -107,14 +113,13 @@ function updateUsersName(users) {
 function checkForWin(users) {
 	win = false;
 	tie = false;
-	console.log("Checking for win!");
 	opponentChoice = getOpponentChoice(users);
 	myChoice = users[whoami]['choice'];
-	if (opponentChoice === "") return
+	if (opponentChoice === "") {
+		return
+	}
 	wins = users[whoami]['wins'];
 	losses = users[whoami]['losses'];
-
-	console.log("O: " + opponentChoice +"\n" + "P: " + myChoice);
 
 	if ((myChoice === "Rock") || (myChoice === "Paper") || (myChoice === "Scissors")) {
 
@@ -135,13 +140,13 @@ function checkForWin(users) {
         }
         if (win) {
         	wins++;
-        	$('.winner-loser').html("<p> You Won that game <br />Your opponent choice " + opponentChoice + "!</p>");
+        	$('.winner-loser').html("<p> You Won that game <br />Your opponent chose " + opponentChoice + "!</p>");
         } else if (tie) {
         	console.log("Game tied!");
         	$('.winner-loser').html("<p> Game Tied!</p>");
         } else {
         	losses++;
-        	$('.winner-loser').html("<p> You Lost that game <br />Your opponent choice " + opponentChoice + "!</p>");
+        	$('.winner-loser').html("<p> You Lost that game <br />Your opponent chose " + opponentChoice + "!</p>");
         }
 
         database.ref('users/' + whoami).update({
@@ -149,6 +154,8 @@ function checkForWin(users) {
 	  		choice: "",
 	  		losses: losses
 	  	});
+	  	$('#player-2-has-choosen').text("Choosing.....");
+	  	$('#player-1-has-choosen').text("Please pick:");
 	  	$('.choice').on("click", clickChoice);
     }
 
