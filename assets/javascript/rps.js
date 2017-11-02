@@ -21,7 +21,6 @@ if (localStorage.name) {
 			$('#set-name').show();
 		} else {
 			$('#type-chat').removeAttr("disabled");
-			$('#choices').show();
 		}
 	})
 } 
@@ -57,23 +56,22 @@ database.ref().on("value", function(snapshot) {
 	} else {
 		chatLog = snapshot.val().chatlog;
 	}
-
-	users = snapshot.val().users;
-	console.log(users);
-
 	// Log everything that's coming out of snapshot
 
-	if (snapshot.val().users && snapshot.val().users.length > 1) {
-
-		$('#set-name').hide();
-		$('#type-chat').attr("disabled", "disabled");
-	}
-	
 	if (snapshot.val().users) {
 		updateUsersName(snapshot.val().users);
 		updateChatLog(chatLog);
+	}
+
+	if (snapshot.val().users && moreThanOne(snapshot.val().users)) {
+		$('#choices').show();
+		$('#set-name').hide();
+		$('#type-chat').attr("disabled", "disabled");
+
 		checkForWin(snapshot.val().users);
 	}
+	
+
 
 	
 
@@ -81,6 +79,10 @@ database.ref().on("value", function(snapshot) {
 }, function(errorObject) {
 	console.log("Errors handled: " + errorObject.code);
 });
+
+function moreThanOne(users) {
+	if (Object.keys(users).length > 1) {return true} else {return false}
+}
 
 function updateUsersName(users) {
 	names = Object.keys(users);
@@ -97,8 +99,8 @@ function updateUsersName(users) {
 function checkForWin(users) {
 	opponentChoice = getOpponentChoice(users);
 	myChoice = users[whoami]['choice'];
-	wins = users[whomai]['wins'];
-	losses = users[whomai]['losses'];
+	wins = users[whoami]['wins'];
+	losses = users[whoami]['losses'];
 
 	if ((myChoice === "Rock") || (myChoice === "Paper") || (myChoice === "Scissors")) {
 
@@ -124,7 +126,7 @@ function checkForWin(users) {
 
 }
 
-function getOpponentChoice(opponent) {
+function getOpponentChoice(users) {
 	names = Object.keys(users);
 	names.forEach(function(item) {
 		if (item !== whoami) {
