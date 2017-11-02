@@ -65,10 +65,12 @@ database.ref().on("value", function(snapshot) {
 	if (snapshot.val().users && moreThanOne(snapshot.val().users)) {
 		$('#choices').show();
 		$('#set-name').hide();
-		$('#type-chat').attr("disabled", "disabled");
 		
+		$('#type-chat').removeAttr("disabled");
 		if (snapshot.val().users[whoami].choice !== "")
 			checkForWin(snapshot.val().users);
+	} else {
+		$('#type-chat').attr("disabled", "disabled");
 	}
 	
 
@@ -177,7 +179,8 @@ function updateChatLog(chatlog) {
 
 }
 
-function sendMessage() {
+function sendMessage(event) {
+	event.preventDefault();
 	var message = $('#type-chat').val().trim();
 	if (message == '') return
 
