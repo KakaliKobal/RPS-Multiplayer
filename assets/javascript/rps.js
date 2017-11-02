@@ -18,8 +18,8 @@ if (localStorage.name) {
 	database.ref("users/" + whoami).once('value', function(snapshot) {
 		if (snapshot.val() == null) {
 			localStorage.removeItem(name);
+			$('#set-name').show();
 		} else {
-			$('#set-name').hide();
 			$('#type-chat').removeAttr("disabled");
 		}
 	})

@@ -59,3 +59,7 @@ hr {
 #type-chat {
 	width: 45%;
 }
+
+#set-name {
+	display: none;
+}
