@@ -17,9 +17,11 @@ hr {
 	border-width: 1px;
 }
 .submit-info {
-	background-color: lime;
-	color: black;
-	border-color: #b3ffb3;
+	background-color: #0d0d0d;
+    border: lime;
+	border-style: inset;
+	border-width: 1px;
+    color: lime;
 	
 }
 
@@ -62,4 +64,13 @@ hr {
 
 #set-name, #choices {
 	display: none;
+}
+
+.choice {
+    background-color: #0d0d0d;
+    border: lime;
+	border-style: inset;
+	border-width: 1px;
+    color: lime;
+    font-size: 30px;
 }

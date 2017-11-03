@@ -270,9 +270,6 @@ function updateOnlineInfo() {
 	    // Add this device to my connections list
 	    // this value could contain info about the device or a timestamp too
 	    con.set(true);
-
-	    // When I disconnect, update the last time I was seen online
-	    lastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
 	  }
 	});
 }
